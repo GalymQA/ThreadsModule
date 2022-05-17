@@ -1,0 +1,7 @@
+.idea
+.iml
+*.iml
+*.out
+/out
+target
+folder_structure_report.txt
