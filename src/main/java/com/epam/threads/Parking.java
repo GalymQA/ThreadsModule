@@ -7,47 +7,42 @@ public class Parking {
 
     private static final int ONE = 1;
 
-    private String name;
-    private int numberOfSpaces;
-    private List<Car> parkedCars = new ArrayList<>();
+    private final String name;
+    private final int numberOfSpaces;
+    private final List<Car> parkedCars = new ArrayList<>();
 
     public Parking(String name, int numberOfSpaces) {
         if (numberOfSpaces < ONE) {
-            throw new IllegalArgumentException("Only a positive integer is allowed for the number of spaces at a parking.");
+            throw new IllegalArgumentException("Number of spaces at a parking has to positive.");
         }
         this.name = name;
         this.numberOfSpaces = numberOfSpaces;
     }
 
-    public void parkCar(Car car) {
+    synchronized public void parkCar(Car car) throws InterruptedException {
+        System.out.println("Car " + car.getId() + " is parking");
         parkedCars.add(car);
         System.out.println(" - Parked car : " + car);
-        System.out.println(" - Number of parked cars now : " + parkedCars.size());
-
+        System.out.println(" - Number of parked cars now : " + parkedCars.size() + (parkedCars));
     }
 
-    public void printToConsoleParkedCars() {
-        System.out.println("*************");
-        for (Car car: parkedCars) {
-            System.out.println("Parked car: " + car);
-        }
-        System.out.println("*************");
+    public void reside(Car car) throws InterruptedException {
+        Thread.sleep(car.getParkTimeInSeconds() * 1000L);
     }
 
-    public String getName() {
-        return name;
+    synchronized public void leave(Car car) throws InterruptedException {
+        System.out.println("Car " + car.getId() + " is leaving parking");
+        parkedCars.remove(car);
+        System.out.println(" - Left parking : " + car);
+        System.out.println(" - Number of parked cars now : " + parkedCars.size() + (parkedCars));
+    }
+
+    synchronized public void leaveDueToTimeOut(Car car) {
+        System.out.println("Car " + car.getId() + " can't wait. Has to go!!!");
     }
 
     public int getNumberOfSpaces() {
         return numberOfSpaces;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setNumberOfSpaces(int numberOfSpaces) {
-        this.numberOfSpaces = numberOfSpaces;
     }
 
     @Override
