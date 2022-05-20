@@ -1,4 +1,4 @@
-package com.epam.threads;
+package com.epam.threads.maintask;
 
 import java.util.Random;
 import java.util.concurrent.Semaphore;

@@ -1,4 +1,4 @@
-package com.epam.threads;
+package com.epam.threads.maintask;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +23,7 @@ public class Parking {
         System.out.println("Car " + car.getId() + " is parking");
         parkedCars.add(car);
         System.out.println(" - Parked car : " + car);
-        System.out.println(" - Number of parked cars now : " + parkedCars.size() + (parkedCars));
+        System.out.println(" - Number of parked cars : " + parkedCars.size() + " " + (parkedCars));
     }
 
     public void reside(Car car) throws InterruptedException {
@@ -34,7 +34,7 @@ public class Parking {
         System.out.println("Car " + car.getId() + " is leaving parking");
         parkedCars.remove(car);
         System.out.println(" - Left parking : " + car);
-        System.out.println(" - Number of parked cars now : " + parkedCars.size() + (parkedCars));
+        System.out.println(" - Number of parked cars : " + parkedCars.size() + " " + (parkedCars));
     }
 
     synchronized public void leaveDueToTimeOut(Car car) {

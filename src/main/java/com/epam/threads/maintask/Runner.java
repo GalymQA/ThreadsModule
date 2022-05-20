@@ -1,4 +1,4 @@
-package com.epam.threads;
+package com.epam.threads.maintask;
 
 import java.util.ArrayList;
 import java.util.List;
