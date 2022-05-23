@@ -65,7 +65,7 @@ public class AirplaneAtAirport extends Airplane implements Runnable {
     private void takeOffFromRunway(Runway runway) {
         try {
             lock.lock();
-            System.out.println("- Airplane " + getId() + " has taken off the Runway " + runway.getId());
+            System.out.println("- Airplane " + getId() + " has taken off Runway " + runway.getId());
             runway.releaseAirplane(this);
         } catch (AirportException e) {
             e.printStackTrace();
