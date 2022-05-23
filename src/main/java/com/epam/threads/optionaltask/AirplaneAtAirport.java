@@ -24,34 +24,40 @@ public class AirplaneAtAirport extends Airplane implements Runnable {
     public void run() {
         try {
             semaphore.acquire();
-            Runway runway = this.getNextAvailableRunway();
-            this.moveToAvailableRunway(runway);
-            this.takeOffFromRunway(runway);
+            Runway runway = getRunwayAndMoveTo();
+            takeOffFromRunway(runway);
             semaphore.release();
         } catch (InterruptedException | FlightException e) {
             e.printStackTrace();
         }
     }
 
-    synchronized private Runway getNextAvailableRunway() throws FlightException {
+    private Runway getRunwayAndMoveTo() throws FlightException, InterruptedException {
+        Runway runway;
         try {
             lock.lock();
-            if (!airport.isAnyRunwayAvailable()) {
-                throw new FlightException("No runway available. Semaphore is broken.");
-            }
-            Runway runway = airport.getNextAvailableRunway();
-            if (runway == null) {
-                throw new FlightException("Runway can't be null.");
-            }
-            return runway;
+            runway = getRunway();
+            moveTo(runway);
         } finally {
             lock.unlock();
         }
+        Thread.sleep(TIME_TO_SLEEP);
+        return runway;
     }
 
-    synchronized private void moveToAvailableRunway(Runway runway) throws InterruptedException {
+    private Runway getRunway() throws FlightException {
+        if (!airport.isAnyRunwayAvailable()) {
+            throw new FlightException("No runway available. Semaphore is broken.");
+        }
+        Runway runway = airport.getAvailableRunway();
+        if (runway == null) {
+            throw new FlightException("Runway can't be null.");
+        }
+        return runway;
+    }
+
+    private void moveTo(Runway runway) {
         System.out.println(" + Airplane " + getId() + " started to move to Runway " + runway.getId());
-        Thread.sleep(TIME_TO_SLEEP);
     }
 
     private void takeOffFromRunway(Runway runway) {

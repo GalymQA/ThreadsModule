@@ -14,11 +14,11 @@ public class Airport {
         this.runways = runways;
     }
 
-    synchronized public int getCountOfRunways() {
+    public int getCountOfRunways() {
         return runways.size();
     }
 
-    synchronized public boolean isAnyRunwayAvailable() {
+    public boolean isAnyRunwayAvailable() {
         boolean isAnyRunwayAvailable = false;
         for (Runway runway : runways) {
             isAnyRunwayAvailable = isAnyRunwayAvailable || runway.isAvailable();
@@ -26,7 +26,7 @@ public class Airport {
         return isAnyRunwayAvailable;
     }
 
-    synchronized public Runway getNextAvailableRunway() throws FlightException {
+    public Runway getAvailableRunway() throws FlightException {
         Runway availableRunway = null;
         for (Runway runway : runways) {
             if (runway.isAvailable()) {

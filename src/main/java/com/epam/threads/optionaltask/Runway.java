@@ -12,7 +12,7 @@ public class Runway {
         this.available = available;
     }
 
-    synchronized public void acceptAirplane() throws FlightException {
+    public void acceptAirplane() throws FlightException {
         if (available) {
             available = false;
             System.out.println(" + Runway " + id + " has been chosen as the next available runway");
@@ -21,7 +21,7 @@ public class Runway {
         }
     }
 
-    synchronized public void releaseAirplane(Airplane airplane) throws FlightException {
+    public void releaseAirplane(Airplane airplane) throws FlightException {
         if (!available) {
             available = true;
             System.out.println(" - Runway " + id + " has released Airplane " + airplane.getId());
@@ -30,11 +30,11 @@ public class Runway {
         }
     }
 
-    synchronized public boolean isAvailable() {
+    public boolean isAvailable() {
         return available;
     }
 
-    synchronized public int getId() {
+    public int getId() {
         return id;
     }
 
