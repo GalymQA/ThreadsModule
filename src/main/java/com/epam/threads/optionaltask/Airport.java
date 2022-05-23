@@ -1,6 +1,6 @@
 package com.epam.threads.optionaltask;
 
-import com.epam.threads.optionaltask.exceptions.FlightException;
+import com.epam.threads.optionaltask.exceptions.AirportException;
 
 import java.util.List;
 
@@ -26,12 +26,12 @@ public class Airport {
         return isAnyRunwayAvailable;
     }
 
-    public Runway getAvailableRunway() throws FlightException {
+    public Runway getAvailableRunway() throws AirportException {
         Runway availableRunway = null;
         for (Runway runway : runways) {
             if (runway.isAvailable()) {
                 availableRunway = runway;
-                availableRunway.acceptAirplane();
+                availableRunway.reserve();
                 return availableRunway;
             }
         }
