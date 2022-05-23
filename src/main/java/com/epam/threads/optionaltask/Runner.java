@@ -3,6 +3,7 @@ package com.epam.threads.optionaltask;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class Runner {
 
@@ -14,35 +15,36 @@ public class Runner {
         Airport airport = new Airport("Kennedy Airport", runways);
         System.out.println("Airport : " + airport);
         Semaphore semaphore = createSemaphore(airport);
-        List<AirPlane> airplanes = createAirplanes(semaphore);
-        System.out.println("Airplanes : " + airplanes);
-        startThreads(airplanes);
+        ReentrantLock lock = new ReentrantLock();
+        List<AirplaneAtAirport> airplanesAtAirport = createAirplanesAtAirport(semaphore, airport, lock);
+        System.out.println("Airplanes : " + airplanesAtAirport);
+        startThreads(airplanesAtAirport);
     }
 
     private static List<Runway> createRunways() {
         List<Runway> runways = new ArrayList<>();
         for (int i = 0; i < Runner.NUMBER_OF_RUNWAYS; i++) {
-            runways.add(new Runway(i));
+            runways.add(new Runway(i, true));
         }
         return runways;
     }
 
-    private static List<AirPlane> createAirplanes(Semaphore semaphore) {
-        List<AirPlane> airplanes = new ArrayList<>();
+    private static List<AirplaneAtAirport> createAirplanesAtAirport(Semaphore semaphore, Airport airport, ReentrantLock lock) {
+        List<AirplaneAtAirport> airplanesAtAirport = new ArrayList<>();
         for (int i = 0; i < Runner.NUMBER_OF_AIRPLANES; i++) {
-            airplanes.add(new AirPlane(i, semaphore));
+            airplanesAtAirport.add(new AirplaneAtAirport(i, semaphore, airport, lock));
         }
-        return airplanes;
+        return airplanesAtAirport;
     }
 
     private static Semaphore createSemaphore(Airport airport) {
         return new Semaphore(airport.getCountOfRunways());
     }
 
-    private static void startThreads(List<AirPlane> airPlanes) {
+    private static void startThreads(List<AirplaneAtAirport> airplanesAtAirport) {
         System.out.println("*** Starting all threads: ");
-        for (AirPlane airPlane: airPlanes) {
-            new Thread(airPlane).start();
+        for (AirplaneAtAirport airplaneAtAirport: airplanesAtAirport) {
+            new Thread(airplaneAtAirport).start();
         }
     }
 

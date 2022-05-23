@@ -1,21 +1,41 @@
 package com.epam.threads.optionaltask;
 
-import java.util.ArrayList;
+import com.epam.threads.optionaltask.exceptions.FlightException;
+
 import java.util.List;
 
 public class Airport {
 
     private final String name;
     private final List<Runway> runways;
-    private final List<AirPlane> airplanesToTakeOff = new ArrayList<>();
 
     public Airport(String name, List<Runway> runways) {
         this.name = name;
         this.runways = runways;
     }
 
-    public int getCountOfRunways() {
+    synchronized public int getCountOfRunways() {
         return runways.size();
+    }
+
+    synchronized public boolean isAnyRunwayAvailable() {
+        boolean isAnyRunwayAvailable = false;
+        for (Runway runway : runways) {
+            isAnyRunwayAvailable = isAnyRunwayAvailable || runway.isAvailable();
+        }
+        return isAnyRunwayAvailable;
+    }
+
+    synchronized public Runway getNextAvailableRunway() throws FlightException {
+        Runway availableRunway = null;
+        for (Runway runway : runways) {
+            if (runway.isAvailable()) {
+                availableRunway = runway;
+                availableRunway.acceptAirplane();
+                return availableRunway;
+            }
+        }
+        return availableRunway;
     }
 
     @Override
@@ -25,22 +45,5 @@ public class Airport {
                 ", runways=" + runways +
                 '}';
     }
-
-    private void airplaneStartMoveToRunway(AirPlane airPlane) {
-        System.out.println("Airplane " + airPlane.getId() + "has started to move to a runway");
-    }
-
-    private void airplaneAcceptToRunway(AirPlane airPlane) {
-        System.out.println("Runway has accepted Airplane " + airPlane.getId() + " to take off");
-    }
-
-    private void airplaneTakOffRunway(AirPlane airPlane) {
-        System.out.println("Airplane " + airPlane.getId() + " has taken off from the runway");
-    }
-
-    private void airplaneReleaseRunway(AirPlane airPlane) {
-        System.out.println("Airport " + airPlane.getId() + "start to move to a runway");
-    }
-
 
 }
