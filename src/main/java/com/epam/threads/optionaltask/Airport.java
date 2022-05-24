@@ -14,10 +14,6 @@ public class Airport {
         this.runways = runways;
     }
 
-    public int getCountOfRunways() {
-        return runways.size();
-    }
-
     public boolean isAnyRunwayAvailable() {
         boolean isAnyRunwayAvailable = false;
         for (Runway runway : runways) {
@@ -36,6 +32,10 @@ public class Airport {
             }
         }
         return availableRunway;
+    }
+
+    public int getCountOfRunways() {
+        return runways.size();
     }
 
     @Override

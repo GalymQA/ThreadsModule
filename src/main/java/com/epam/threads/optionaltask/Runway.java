@@ -17,7 +17,7 @@ public class Runway {
             available = false;
             System.out.println("+ Runway " + id + " has been chosen as the next available runway");
         } else {
-            throw new AirportException("Sorry, " + "Runway " + id + " can't accept airplane");
+            throw new AirportException("Sorry, Runway " + id + " can't accept airplane");
         }
     }
 
@@ -26,16 +26,16 @@ public class Runway {
             available = true;
             System.out.println("- Runway " + id + " has released Airplane " + airplane.getId());
         } else {
-            throw new AirportException("Sorry, " + "Runway " + id + " can't release airplane - " + available);
+            throw new AirportException("Sorry, Runway " + id + " can't release airplane");
         }
-    }
-
-    public boolean isAvailable() {
-        return available;
     }
 
     public int getId() {
         return id;
+    }
+
+    public boolean isAvailable() {
+        return available;
     }
 
     @Override

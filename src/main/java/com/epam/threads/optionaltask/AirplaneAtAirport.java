@@ -7,16 +7,16 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class AirplaneAtAirport extends Airplane implements Runnable {
 
-    private static final int TIME_TO_SLEEP = 3000;
+    private static final int TIME_TO_TAKE_OFF = 3000;
 
-    private final Semaphore semaphore;
     private final Airport airport;
+    private final Semaphore semaphore;
     private final ReentrantLock lock;
 
     public AirplaneAtAirport(int id, Airport airport, Semaphore semaphore, ReentrantLock lock) {
         super(id);
-        this.semaphore = semaphore;
         this.airport = airport;
+        this.semaphore = semaphore;
         this.lock = lock;
     }
 
@@ -43,7 +43,7 @@ public class AirplaneAtAirport extends Airplane implements Runnable {
         } finally {
             lock.unlock();
         }
-        Thread.sleep(TIME_TO_SLEEP);
+        Thread.sleep(TIME_TO_TAKE_OFF);
         return runway;
     }
 

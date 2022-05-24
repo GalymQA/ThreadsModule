@@ -1,6 +1,7 @@
 package com.epam.threads.maintask;
 
-import java.util.ArrayList;
+import com.epam.threads.maintask.exceptions.ParkingException;
+
 import java.util.List;
 
 public class Parking {
@@ -8,48 +9,45 @@ public class Parking {
     private static final int ONE = 1;
 
     private final String name;
-    private final int numberOfSpaces;
-    private final List<Car> parkedCars = new ArrayList<>();
+    private final List<ParkingSlot> parkingSlots;
 
-    public Parking(String name, int numberOfSpaces) {
-        if (numberOfSpaces < ONE) {
-            throw new IllegalArgumentException("Number of spaces at a parking has to positive.");
+    public Parking(String name, List<ParkingSlot> parkingSlots) {
+        if (parkingSlots.size() < ONE) {
+            throw new IllegalArgumentException("Number of parking slots at a parking has to be positive.");
         }
         this.name = name;
-        this.numberOfSpaces = numberOfSpaces;
+        this.parkingSlots = parkingSlots;
     }
 
-    synchronized public void parkCar(Car car) throws InterruptedException {
-        System.out.println("Car " + car.getId() + " is parking");
-        parkedCars.add(car);
-        System.out.println(" - Parked car : " + car);
-        System.out.println(" - Number of parked cars : " + parkedCars.size() + " " + (parkedCars));
+    public boolean isAnyParkingSlotAvailable() {
+        boolean isAnyParkingSlotAvailable = false;
+        for (ParkingSlot parkingSlot : parkingSlots) {
+            isAnyParkingSlotAvailable = isAnyParkingSlotAvailable || parkingSlot.isAvailable();
+        }
+        return isAnyParkingSlotAvailable;
     }
 
-    public void reside(Car car) throws InterruptedException {
-        Thread.sleep(car.getParkTimeInSeconds() * 1000L);
+    public ParkingSlot getAvailableParkingSlot() throws ParkingException {
+        ParkingSlot availableParkingSlot = null;
+        for (ParkingSlot parkingSlot : parkingSlots) {
+            if (parkingSlot.isAvailable()) {
+                availableParkingSlot = parkingSlot;
+                availableParkingSlot.reserveSlot();
+                return availableParkingSlot;
+            }
+        }
+        return availableParkingSlot;
     }
 
-    synchronized public void leave(Car car) throws InterruptedException {
-        System.out.println("Car " + car.getId() + " is leaving parking");
-        parkedCars.remove(car);
-        System.out.println(" - Left parking : " + car);
-        System.out.println(" - Number of parked cars : " + parkedCars.size() + " " + (parkedCars));
-    }
-
-    synchronized public void leaveDueToTimeOut(Car car) {
-        System.out.println("Car " + car.getId() + " can't wait. Has to go!!!");
-    }
-
-    public int getNumberOfSpaces() {
-        return numberOfSpaces;
+    public int getNumberOfParkingSlots() {
+        return parkingSlots.size();
     }
 
     @Override
     public String toString() {
         return "Parking{" +
                 "name='" + name + '\'' +
-                ", numberOfSpaces=" + numberOfSpaces +
+                ", numberOfParkingSlots=" + getNumberOfParkingSlots() +
                 '}';
     }
 
