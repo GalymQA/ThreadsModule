@@ -26,9 +26,10 @@ public class AirplaneAtAirport extends Airplane implements Runnable {
             semaphore.acquire();
             Runway runway = getRunwayAndMoveTo();
             takeOffFromRunway(runway);
-            semaphore.release();
         } catch (InterruptedException e) {
             e.printStackTrace();
+        } finally {
+            semaphore.release();
         }
     }
 
